@@ -25,22 +25,22 @@ public class Aplicacion {
         client.connect(options);
 
         //Registrar un nuevo dispositivo
-        client.publish("s/us", ("100," + device_name + ",c8y_MQTTDevice").getBytes(), 2, false);
+        //client.publish("s/us", ("100," + device_name + ",c8y_MQTTDevice").getBytes(), 2, false);
 
         //Colocar la información referente al hardware
-        client.publish("s/us", "110,S123456789,MQTT test model,Rev0.1".getBytes(), 2, false);
+        //client.publish("s/us", "110,S123456789,MQTT test model,Rev0.1".getBytes(), 2, false);
 
         //Agregar un reinicio de la operación
-        client.publish("s/us", "114,c8y_Restart".getBytes(), 2, false);
+        //client.publish("s/us", "114,c8y_Restart".getBytes(), 2, false);
 
-        System.out.println("The device \"" + device_name + "\" has been registered successfully!");
+        //System.out.println("The device \"" + device_name + "\" has been registered successfully!");
 
         // Esperar operaciones o instrucciones 
         client.subscribe("s/ds", new IMqttMessageListener() {
             public void messageArrived (final String topic, final MqttMessage message) throws Exception {
                 final String payload = new String(message.getPayload());
 
-                System.out.println("Received operation " + payload);
+                System.out.println("Mensaje Recibido: " + payload);
                 if (payload.startsWith("510")) {
                     // ejecuta la operacion en otro hilo (thread) para termine de 
                 	//procesar este mensaje y acuse de recibo al servidor
@@ -70,7 +70,7 @@ public class Aplicacion {
                 try {
                     int temp = (int) (Math.random() * 10 + 10);
 
-                    System.out.println("Sending temperature measurement (" + temp + "º) ...");
+                    System.out.println("Enviando dato de temperatura: (" + temp + "º) ...");
                     client.publish("s/us", new MqttMessage(("211," + temp).getBytes()));
                 } catch (MqttException e) {
                     e.printStackTrace();
